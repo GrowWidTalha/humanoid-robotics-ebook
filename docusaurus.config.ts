@@ -11,12 +11,12 @@ const config: Config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'https://growwidtalha.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
-  baseUrl: '/',
+  baseUrl: '/humanoid-robotics-ebook',
 
   // GitHub pages deployment config.
-  organizationName: 'your-org', // Usually your GitHub org/user name.
+  organizationName: 'GrowWidTalha', // Usually your GitHub org/user name.
   projectName: 'humanoid-robots-book', // Usually your repo name.
 
   onBrokenLinks: 'throw',
@@ -39,7 +39,7 @@ const config: Config = {
           routeBasePath: 'docs',
           sidebarPath: './sidebars.ts',
           // Remove this to remove the "edit this page" links.
-          editUrl: undefined,
+          editUrl: "https://github.com/GrowWidTalha/humanoid-robotics-ebook/tree/main",
         },
         blog: false,
         theme: {

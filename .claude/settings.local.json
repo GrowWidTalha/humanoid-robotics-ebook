@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git rev-parse:*)",
+      "Bash(git fetch:*)",
+      "Bash(ls:*)",
+      "Bash(.specify/scripts/bash/create-new-feature.sh:*)",
+      "Bash(.specify/scripts/bash/create-phr.sh:*)",
+      "Bash(.specify/scripts/bash/setup-plan.sh:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "Bash(.specify/scripts/bash/check-prerequisites.sh:*)",
+      "Bash(awk:*)",
+      "Bash(grep:*)",
+      "Bash(.specify/scripts/bash/update-agent-context.sh:*)",
+      "Bash(if [ -f /mnt/d/class/humanoid-robots-book/.gitignore ])",
+      "Bash(then echo \"EXISTS\")",
+      "Bash(else echo \"MISSING\")",
+      "Bash(fi)",
+      "WebSearch",
+      "Bash(find:*)",
+      "Bash(git -C /mnt/d/class/humanoid-robots-book rev-parse:*)",
+      "Bash(npm run build:*)",
+      "Bash(git remote add:*)",
+      "Bash(git commit:*)",
+      "Bash(git config:*)",
+      "Bash(git push:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
