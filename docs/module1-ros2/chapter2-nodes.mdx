@@ -1,0 +1,142 @@
+---
+id: chapter2-nodes
+title: "Chapter 2: Nodes - The Building Blocks"
+sidebar_label: "Nodes"
+sidebar_position: 2
+description: "Discover how ROS 2 nodes work as independent programs that collaborate to create intelligent robot behavior."
+keywords: [ros2, nodes, modularity, process, building-blocks, humanoid]
+---
+
+# Chapter 2: Nodes - The Building Blocks
+
+## Learning Objectives
+
+By the end of this chapter, you will be able to:
+
+1. Explain what a node is and why it's the basic building block of ROS 2
+2. Describe why robots use multiple nodes instead of one big program
+3. Identify different nodes in a humanoid robot system
+4. Explain how nodes communicate without sharing memory
+
+---
+
+## What is a Node?
+
+In Chapter 1, you learned that ROS 2 acts like a nervous system for robots. But what are the actual parts that make up this system? The answer is **nodes**.
+
+A **node** is a single program that does one specific job. Think of each node as a specialist - it focuses on doing one thing really well instead of trying to do everything at once.
+
+For example, imagine you're working on a school project with friends. You might split up the work: one person researches, another writes, someone else creates visuals, and another person presents. Each person focuses on their specialty. ROS 2 nodes work the same way - each node has one clear job.
+
+:::note Key Concept
+A node is an independent program that performs one specific task in a robot system. Each node runs separately and communicates with other nodes through ROS 2.
+:::
+
+In a humanoid robot, you might have:
+- A **camera node** that captures images
+- A **vision node** that processes images to detect objects
+- A **navigation node** that plans where to walk
+- A **leg control node** that moves the robot's legs
+
+Each node does its job and shares information with other nodes that need it.
+
+---
+
+## Why Multiple Nodes Instead of One Big Program?
+
+You might wonder: why not just write one giant program that does everything? Why split the robot's brain into many smaller pieces? There are several important reasons:
+
+**1. Modularity and Clarity**
+When each node does one job, the code is simpler and easier to understand. A camera node just captures images. A vision node just processes images. You don't mix camera control code with vision algorithms in the same file. This keeps everything organized.
+
+Think about it like organizing a kitchen. You don't put plates, pots, food, and cleaning supplies all in one drawer. You organize them separately so you can find what you need quickly. Nodes work the same way - each piece of functionality lives in its own organized space.
+
+**2. Easier Development and Testing**
+Different engineers can work on different nodes at the same time without interfering with each other. One engineer might improve the vision node while another engineer works on the leg control node. You can also test each node separately to make sure it works correctly.
+
+For example, if you're developing a vision system, you can test it by feeding it recorded images without needing the actual robot hardware. The vision node doesn't care whether images come from a real camera or a test file - it just processes whatever images it receives. This makes development much faster.
+
+**3. Fault Tolerance**
+If one node crashes, the other nodes keep running. Imagine a humanoid robot where the speech recognition node stops working. The robot might not understand voice commands anymore, but it can still see, walk, and maintain balance because those are handled by separate nodes. With one big program, one bug could crash everything.
+
+This is like how your phone still works if one app crashes. The crashed app stops, but your other apps keep running. Nodes provide the same safety for robots.
+
+**4. Hardware Independence**
+Nodes can run on different computers. The camera node might run on a small computer mounted in the robot's head, while complex AI vision processing runs on a powerful computer in the robot's body. As long as they can communicate through ROS 2, it doesn't matter where each node runs.
+
+This flexibility matters for real robots. Some computers are small enough to fit inside a robot's head but aren't very powerful. Other computers are powerful but too big and heavy to mount on the robot. With nodes, you can put each program where it makes the most sense.
+
+**5. Reusability**
+Once you build a good camera node, you can use it in different robot projects. The same camera node that works in a humanoid robot could work in a wheeled robot or a robotic arm. You don't have to rewrite the camera code for every new robot.
+
+Companies like Boston Dynamics and Tesla don't write all new code for each robot they build. They reuse proven nodes and only write new ones for robot-specific features. This saves months or even years of development time.
+
+---
+
+## How Nodes Communicate
+
+Here's something important: **nodes don't share memory**. They can't reach into each other's data. This is intentional - it's a safety feature.
+
+Instead, nodes communicate by sending messages through ROS 2. Think of it like sending emails or text messages. One node can publish data (like camera images) to a topic, and any other node that needs those images can subscribe to that topic. We'll explore this communication in detail in Chapter 3.
+
+The key idea is that nodes are isolated from each other. They only interact through the messages they send via ROS 2. This isolation makes the system more robust and prevents bugs in one node from corrupting data in another node.
+
+```mermaid
+graph LR
+    A[Camera Node] -->|Image Topic| B[Vision Node]
+    B -->|Object Detections| C[Navigation Node]
+    C -->|Motor Commands| D[Leg Control Node]
+```
+
+*Figure 1: Nodes communicate by passing messages through topics*
+
+---
+
+## Humanoid Robot Node Examples
+
+Let's look at real examples of how nodes work together in a humanoid robot:
+
+**Example 1: Visual Navigation**
+When a humanoid robot walks through a room avoiding obstacles:
+- The **Camera Node** continuously captures images (maybe 30 frames per second)
+- The **Vision Node** receives these images and detects obstacles (walls, furniture, people)
+- The **Navigation Node** receives obstacle positions and plans a safe walking path
+- The **Leg Control Node** receives the path and moves the robot's legs to walk along it
+
+Each node focuses on its specialty, and they work together seamlessly through ROS 2.
+
+**Example 2: Balance Control**
+To keep a humanoid robot from falling over:
+- An **IMU Node** (Inertial Measurement Unit) measures the robot's tilt and rotation
+- A **Balance Control Node** receives tilt data and calculates corrections
+- Multiple **Motor Control Nodes** receive correction commands and adjust each leg's position
+
+If the robot starts to lean left, the IMU detects it immediately, the balance controller calculates how to shift weight, and the motor controllers adjust the legs in milliseconds.
+
+**Example 3: Object Manipulation**
+When a humanoid robot picks up a cup:
+- A **Vision Node** identifies the cup and estimates its position
+- A **Grasp Planning Node** calculates where the robot's fingers should grip
+- An **Arm Control Node** moves the arm to reach the cup
+- **Force Sensor Nodes** in the fingers measure grip pressure
+- A **Gripper Control Node** adjusts grip strength (tight enough to hold, gentle enough not to crush)
+
+Each of these nodes runs independently, but they coordinate perfectly through message passing.
+
+---
+
+## Summary
+
+Nodes are the building blocks of ROS 2 systems. Each node is an independent program that does one specific job well. Robots use multiple nodes instead of one big program because this makes development easier, prevents crashes from spreading, and allows different parts to run on different computers.
+
+Nodes communicate by passing messages through ROS 2, not by sharing memory. This isolation keeps the system robust and organized.
+
+In the next chapter, you'll learn about the different ways nodes can communicate: topics, services, and actions.
+
+:::tip Learning Checkpoint
+Before continuing, try to answer:
+1. What is a node in ROS 2?
+2. Why do robots use many small nodes instead of one big program?
+3. Can you name three nodes that might work together in a humanoid robot?
+4. Why don't nodes share memory directly?
+:::

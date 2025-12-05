@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" role="img" aria-labelledby="vla-pipeline-title vla-pipeline-desc">
+  <title id="vla-pipeline-title">VLA Voice-to-Action Pipeline</title>
+  <desc id="vla-pipeline-desc">Diagram showing the complete VLA pipeline from voice input through Whisper ASR, LLM Understanding, Cognitive Planner, Motion Planning, to Robot Actions. Shows data types and latencies at each stage.</desc>
+
+  <!-- Definitions for arrow markers -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#333" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="300" fill="#f8f9fa"/>
+
+  <!-- Stage 1: Voice Input -->
+  <rect x="20" y="80" width="160" height="80" rx="8" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+  <text x="100" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1976d2">Voice Input</text>
+  <text x="100" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#555">Audio Waveform</text>
+
+  <!-- Arrow 1 -->
+  <line x1="180" y1="120" x2="220" y2="120" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="200" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#666">100-500ms</text>
+
+  <!-- Stage 2: Whisper ASR -->
+  <rect x="220" y="80" width="160" height="80" rx="8" fill="#e8f5e9" stroke="#388e3c" stroke-width="2"/>
+  <text x="300" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#388e3c">Whisper ASR</text>
+  <text x="300" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#555">Text Transcript</text>
+
+  <!-- Arrow 2 -->
+  <line x1="380" y1="120" x2="420" y2="120" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="400" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#666">500-2000ms</text>
+
+  <!-- Stage 3: LLM Understanding -->
+  <rect x="420" y="80" width="160" height="80" rx="8" fill="#fff3e0" stroke="#f57c00" stroke-width="2"/>
+  <text x="500" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#f57c00">LLM</text>
+  <text x="500" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#f57c00">Understanding</text>
+  <text x="500" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#555">Intent + Objects</text>
+
+  <!-- Arrow 3 -->
+  <line x1="580" y1="120" x2="620" y2="120" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Stage 4: Cognitive Planner -->
+  <rect x="620" y="80" width="160" height="80" rx="8" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2"/>
+  <text x="700" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#7b1fa2">Cognitive</text>
+  <text x="700" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#7b1fa2">Planner</text>
+  <text x="700" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#555">Action Sequence</text>
+
+  <!-- Arrow 4 -->
+  <line x1="780" y1="120" x2="820" y2="120" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="800" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#666">100-1000ms</text>
+
+  <!-- Stage 5: Motion Planning -->
+  <rect x="820" y="80" width="160" height="80" rx="8" fill="#fce4ec" stroke="#c2185b" stroke-width="2"/>
+  <text x="900" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#c2185b">Motion</text>
+  <text x="900" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#c2185b">Planning</text>
+  <text x="900" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#555">Trajectories</text>
+
+  <!-- Arrow 5 -->
+  <line x1="980" y1="120" x2="1020" y2="120" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Stage 6: Robot Actions -->
+  <rect x="1020" y="80" width="160" height="80" rx="8" fill="#e0f2f1" stroke="#00796b" stroke-width="2"/>
+  <text x="1100" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#00796b">Robot Actions</text>
+  <text x="1100" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#555">Physical Movement</text>
+
+  <!-- Total latency annotation -->
+  <text x="600" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Traditional Pipeline Total: 1-3 seconds</text>
+  <text x="600" y="260" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1976d2">End-to-End VLA: 100-500ms (3-6x faster)</text>
+
+  <!-- Legend -->
+  <text x="20" y="30" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#333">Voice-to-Action Pipeline</text>
+</svg>

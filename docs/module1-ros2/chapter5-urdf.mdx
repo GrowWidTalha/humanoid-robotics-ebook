@@ -1,0 +1,131 @@
+---
+id: chapter5-urdf
+title: "Chapter 5: Describing Robot Bodies with URDF"
+sidebar_label: "URDF"
+sidebar_position: 5
+description: "Learn how URDF (Unified Robot Description Format) describes a robot's physical structure - its links, joints, and how they connect."
+keywords: [urdf, robot-description, links, joints, simulation, xml, dof]
+---
+
+# Chapter 5: Describing Robot Bodies with URDF
+
+## Learning Objectives
+
+By the end of this chapter, you will be able to:
+
+1. Explain what URDF is and why robots need a physical description format
+2. Describe the difference between links (rigid bodies) and joints (connections)
+3. Identify the three main joint types: revolute, prismatic, and fixed
+4. Explain how URDF enables simulation and visualization
+
+---
+
+## What is URDF?
+
+In previous chapters, you learned how ROS 2 nodes communicate. But how does ROS 2 know what your robot looks like?
+
+A humanoid robot has arms, legs, torso, head - dozens of moving parts. To simulate, visualize, or plan movement, you need to describe the physical structure precisely.
+
+**URDF (Unified Robot Description Format)** is an XML file that describes your robot's physical structure - all the rigid body parts (links), how they connect (joints), plus properties like size, mass, and sensor locations.
+
+:::note Key Concept
+URDF is the standard format for describing robot bodies in ROS 2. It lists links (rigid parts) and joints (connections) so simulation, visualization, and planning tools understand your robot's structure.
+:::
+
+### Why URDF Matters
+
+URDF enables four critical capabilities:
+
+1. **Simulation**: Gazebo creates a virtual robot for safe testing before using real hardware
+2. **Visualization**: RViz shows a 3D model in real-time
+3. **Motion Planning**: Algorithms use structure to avoid collisions
+4. **Coordinate Transforms**: ROS 2 calculates where each part is relative to others
+
+Without URDF, every tool would need its own format. URDF provides one standard description.
+
+---
+
+## Links: The Rigid Bodies
+
+In URDF, a **link** represents a rigid body part - a piece that doesn't bend. Links are the solid building blocks.
+
+Each link has properties: name ("torso"), geometry (box, cylinder, sphere), mass, visual appearance, and collision shape.
+
+A humanoid has links like torso, upper arm, forearm, hand, upper leg, lower leg, and foot. Each is rigid - the upper arm doesn't bend. Bending happens at joints between links.
+
+:::warning Common Misconception
+Links don't move. Movement happens at joints. A link is rigid - the magic is in how links connect.
+:::
+
+---
+
+## Joints: The Connections
+
+**Joints** define how links connect and move relative to each other. If links are the bones, joints are where the bones meet.
+
+### Joint Types
+
+URDF supports several joint types, but three are most important for humanoid robots:
+
+#### 1. Revolute Joints (Hinges)
+
+A **revolute joint** rotates around an axis, like a door hinge. This is the most common joint in humanoid robots.
+
+**Examples**: Elbow (rotates forearm), knee (rotates lower leg), shoulder (rotates arm). Revolute joints have angle limits - your elbow can't bend backwards.
+
+#### 2. Prismatic Joints (Sliders)
+
+A **prismatic joint** slides along an axis, like a drawer. Less common but useful for grippers (fingers slide together) or telescoping mechanisms.
+
+#### 3. Fixed Joints (Rigid Connections)
+
+A **fixed joint** doesn't move - it permanently connects two links. Used for modularity (swappable parts), sensor mounting (cameras rigidly attached), or organizational clarity.
+
+### Degrees of Freedom (DOF)
+
+Each moving joint adds one **degree of freedom** - one independent way the robot can move. Revolute and prismatic joints each add 1 DOF. Fixed joints add 0 DOF.
+
+A humanoid might have: arms (7 DOF each = 14 total), legs (6 DOF each = 12 total), head (2-3 DOF), torso (0-3 DOF). Total: 28-32 DOF or more.
+
+:::tip Understanding DOF
+Count the moving joints to find degrees of freedom. Each revolute or prismatic joint adds 1 DOF. Fixed joints add 0 DOF. More DOF means more flexible movement but more complex control.
+:::
+
+---
+
+## Humanoid Robot URDF Examples
+
+**Arm chain**: Torso link → shoulder revolute joint → upper arm link → elbow revolute joint → forearm link → wrist revolute joint → hand link. This gives 3 DOF. Real humanoid arms often have 7 DOF for more natural movement.
+
+**Leg chain**: Pelvis link → hip revolute joint → upper leg link → knee revolute joint → lower leg link → ankle revolute joint → foot link. This gives 3 DOF. Real humanoid legs often have 6 DOF for sideways movement and rotation.
+
+---
+
+## URDF in Simulation
+
+One of URDF's most powerful uses is simulation. Simulators like Gazebo read your URDF file, create a virtual robot with physics (gravity, friction, collisions), and provide a ROS 2 interface. The simulated robot acts like real hardware - it publishes sensor data and responds to commands.
+
+You can test walking, grasping, and navigation safely before running code on expensive real hardware. When your code works in simulation, you have confidence it will work on the physical robot.
+
+---
+
+## Summary
+
+URDF (Unified Robot Description Format) describes a robot's physical structure:
+
+**Links** are rigid body parts (arm, torso, foot) with geometry, mass, and appearance.
+
+**Joints** connect links: revolute joints rotate (elbows, knees), prismatic joints slide (grippers), fixed joints don't move (sensor mounts).
+
+**Degrees of Freedom (DOF)**: Each moving joint adds 1 DOF - one independent way the robot moves.
+
+URDF enables simulation (Gazebo), visualization (RViz), and motion planning. It bridges hardware and software, making robot control possible.
+
+:::tip Learning Checkpoint
+Before continuing, test your understanding:
+1. What's the difference between a link and a joint?
+2. Which joint type would you use for a knee? For a gripper?
+3. If a humanoid arm has a shoulder (2 DOF), elbow (1 DOF), and wrist (2 DOF), what's the total DOF?
+
+*Answers: 1=Link is rigid body, joint is connection that allows movement; 2=Revolute for knee, Prismatic for gripper; 3=5 DOF total*
+:::

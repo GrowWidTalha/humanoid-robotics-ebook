@@ -1,0 +1,134 @@
+---
+id: chapter1-introduction
+title: "Chapter 1: Introduction to ROS 2"
+sidebar_label: "Introduction"
+sidebar_position: 1
+description: "Discover what ROS 2 is and why it's essential for coordinating humanoid robots."
+keywords: [ros2, robotics, middleware, humanoid, nervous-system, coordination]
+---
+
+# Chapter 1: Introduction to ROS 2
+
+## Learning Objectives
+
+By the end of this chapter, you will be able to:
+
+1. Explain what ROS 2 is and identify its role as middleware in robot systems
+2. Describe why humanoid robots need a communication system like ROS 2
+3. Use the "nervous system" analogy to explain how ROS 2 coordinates robot parts
+4. Identify real-world humanoid robots that use ROS 2 or similar systems
+
+---
+
+## The Coordination Challenge
+
+How does a humanoid robot walk while looking at obstacles and balancing its body? Cameras must see the world, the AI brain must understand what's there, legs must move in rhythm, and the whole body must stay balanced. That's dozens of parts working together every single second.
+
+When you walk through your house, your eyes spot obstacles, your brain decides how to step around them, and your legs move automatically. Your nervous system coordinates everything. Now imagine building a robot to do the same - you'd need cameras, vision software, planning programs, motor controllers, and balance sensors. Each is a separate program. How do they work together?
+
+This is the coordination problem. A humanoid robot has cameras, sensors, computers running AI, and motors - all must talk constantly. But how? This is where ROS 2 comes in.
+
+In this chapter, you'll learn how ROS 2 acts like a nervous system for robots.
+
+---
+
+## What is ROS 2?
+
+ROS 2 stands for "Robot Operating System 2." But here's an important fact: **ROS 2 is NOT an operating system** like Windows or Linux. Instead, ROS 2 is **middleware** (software that helps different programs talk to each other).
+
+Think of middleware like a translator at a meeting. Imagine people speaking different languages trying to work together. They need a translator. ROS 2 does the same thing for robot programs.
+
+Here's what ROS 2 does:
+- Lets camera programs send images to vision programs
+- Lets AI programs send commands to motor controllers
+- Keeps everything organized so messages don't get lost
+
+:::note Key Concept
+ROS 2 is middleware - it sits between the robot's hardware and the AI brain, helping them communicate.
+:::
+
+Without ROS 2, every program would need custom code to talk to every other program. With 10 programs, that's 45 different connections! ROS 2 provides one standard way for all programs to communicate.
+
+---
+
+## ROS 2: The Robot's Nervous System
+
+To understand ROS 2's role, think about your own nervous system. Your nervous system has three main parts:
+
+1. **Sensors (eyes, ears, skin)** - They sense the world
+2. **Brain** - It thinks and makes decisions
+3. **Muscles** - They move your body
+
+Your nerves carry messages between all these parts. Your eyes don't talk directly to your leg muscles. Instead, signals flow: eyes → nerves → brain → nerves → muscles. This happens so fast you don't even notice!
+
+**ROS 2 works the same way for robots:**
+
+- **Sensors** (cameras, touch, balance) send data through ROS 2
+- **AI Brain** (vision, planning) receives data, makes decisions, sends commands through ROS 2
+- **Actuators** (motors, grippers) receive commands through ROS 2 and move the robot
+
+*Figure 1: ROS 2 acts like a nervous system, connecting sensors, AI brain, and actuators*
+
+### Why This Matters
+
+Without ROS 2, each part would need custom connections to every other part. Imagine if your eyes had to wire directly to every muscle - what a mess!
+
+With ROS 2, the parts don't even need to know about each other. The camera sends images to ROS 2. Any program that needs images gets them from ROS 2. You can swap out a camera for a better one, and as long as it talks to ROS 2, everything still works!
+
+### A Real Example
+
+Imagine a humanoid robot walking toward a door:
+
+1. **Cameras** see the door and send images through **ROS 2** to the **vision system**
+2. **Vision** detects the door and sends its location through **ROS 2** to the **navigation planner**
+3. **Navigation** calculates a walking path and sends step commands through **ROS 2** to the **leg controllers**
+4. **Leg controllers** move the robot forward
+
+This happens continuously, hundreds of times per second - just like your nervous system coordinating your walk!
+
+---
+
+## Why Humanoid Robots Need ROS 2
+
+Humanoid robots are incredibly complex. A typical humanoid has:
+
+- **20+ joints** to coordinate (shoulders, elbows, wrists, hips, knees, ankles, neck)
+- **Multiple sensors** (cameras for vision, IMUs for balance, force sensors in hands and feet)
+- **AI systems** running vision recognition, path planning, and motion control
+
+These robots face huge coordination challenges like balancing while walking, tracking objects while moving, and adjusting grip force on objects. Without ROS 2, each sensor, AI program, and motor controller would need custom code to talk to all the others. Every time you updated one part, you might break connections to other parts.
+
+:::tip Think About It
+A humanoid robot might have 30 motors, 10 sensors, and 5 AI programs all working together. Without ROS 2, how would they all talk to each other?
+:::
+
+ROS 2 solves this by providing one standard way for everything to communicate. This makes complex coordination possible without chaos.
+
+---
+
+## Real-World Humanoid Robots
+
+Many real humanoid robots use ROS 2 or similar middleware systems for coordination:
+
+- **Boston Dynamics Atlas** - This robot does backflips and parkour. It needs perfect coordination between vision, balance, and motion control to pull off these athletic moves.
+
+- **Figure AI Figure 01** - This humanoid works in warehouses, handling packages and moving objects. It uses vision to see items and precise motor control to manipulate them safely.
+
+- **NASA Valkyrie** - Designed for space missions, this robot integrates dozens of sensors to work in challenging environments where humans can't easily go.
+
+These robots all face the same challenge: coordinating many parts to work as one system. Middleware like ROS 2 makes this possible.
+
+---
+
+## Summary
+
+ROS 2 is middleware that helps robot programs communicate. Like your nervous system connects your sensors to your brain to your muscles, ROS 2 connects robot sensors to AI programs to motors.
+
+In the next chapter, we'll explore **nodes** - the basic building blocks of ROS 2.
+
+:::tip Learning Checkpoint
+Before continuing, explain:
+1. What is ROS 2 and why is it "middleware"?
+2. How is ROS 2 like your nervous system?
+3. Why do humanoid robots need ROS 2?
+:::

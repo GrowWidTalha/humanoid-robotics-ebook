@@ -1,0 +1,8 @@
+{
+  "label": "Module 4: Vision-Language-Action",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Learn how LLMs enable humanoid robots to understand natural language and translate commands into physical actions."
+  }
+}

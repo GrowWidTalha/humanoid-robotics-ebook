@@ -1,0 +1,317 @@
+/**
+ * Custom CSS for When Models Think Wrong book
+ *
+ * Color scheme:
+ * - Blues (#2196F3): Concept explanations
+ * - Greens (#4CAF50): Examples and success
+ * - Reds (#F44336): Warnings and errors
+ */
+
+:root {
+  /* Primary brand colors */
+  --ifm-color-primary: #2196F3;
+  --ifm-color-primary-dark: #1e88e5;
+  --ifm-color-primary-darker: #1976d2;
+  --ifm-color-primary-darkest: #1565c0;
+  --ifm-color-primary-light: #42a5f5;
+  --ifm-color-primary-lighter: #64b5f6;
+  --ifm-color-primary-lightest: #90caf9;
+
+  /* Success (green for examples) */
+  --ifm-color-success: #4CAF50;
+  --ifm-color-success-dark: #43a047;
+  --ifm-color-success-darker: #388e3c;
+  --ifm-color-success-darkest: #2e7d32;
+  --ifm-color-success-light: #66bb6a;
+  --ifm-color-success-lighter: #81c784;
+  --ifm-color-success-lightest: #a5d6a7;
+
+  /* Danger (red for warnings) */
+  --ifm-color-danger: #F44336;
+  --ifm-color-danger-dark: #e53935;
+  --ifm-color-danger-darker: #d32f2f;
+  --ifm-color-danger-darkest: #c62828;
+  --ifm-color-danger-light: #ef5350;
+  --ifm-color-danger-lighter: #e57373;
+  --ifm-color-danger-lightest: #ef9a9a;
+
+  /* Font settings */
+  --ifm-font-family-base: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --ifm-font-family-monospace: 'Fira Code', 'Courier New', monospace;
+  --ifm-font-size-base: 16px;
+  --ifm-line-height-base: 1.65;
+
+  /* Spacing for readability */
+  --ifm-paragraph-margin-bottom: 1.25rem;
+  --ifm-heading-margin-bottom: 0.75rem;
+  --ifm-heading-margin-top: 1.5rem;
+
+  /* Code block styling */
+  --docusaurus-highlighted-code-line-bg: rgba(33, 150, 243, 0.1);
+}
+
+/* Dark mode */
+[data-theme='dark'] {
+  --ifm-color-primary: #64b5f6;
+  --ifm-color-primary-dark: #42a5f5;
+  --ifm-color-primary-darker: #2196F3;
+  --ifm-color-primary-darkest: #1e88e5;
+  --ifm-color-primary-light: #90caf9;
+  --ifm-color-primary-lighter: #bbdefb;
+  --ifm-color-primary-lightest: #e3f2fd;
+
+  --docusaurus-highlighted-code-line-bg: rgba(100, 181, 246, 0.15);
+}
+
+/* Typography improvements for readability */
+.markdown h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.markdown h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--ifm-color-emphasis-200);
+}
+
+.markdown h3 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.markdown p {
+  margin-bottom: 1.25rem;
+  line-height: 1.7;
+}
+
+/* Reading progress indicator styling */
+.theme-doc-breadcrumbs {
+  margin-bottom: 1.5rem;
+}
+
+/* Chapter metadata component spacing */
+.chapter-metadata {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: var(--ifm-color-emphasis-100);
+  border-left: 4px solid var(--ifm-color-primary);
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+/* Mermaid diagram styling */
+.mermaid {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+/* Concept diagrams (blue) */
+.diagram-concept .node rect,
+.diagram-concept .node circle,
+.diagram-concept .node polygon {
+  fill: var(--ifm-color-primary-lightest) !important;
+  stroke: var(--ifm-color-primary) !important;
+}
+
+/* Example diagrams (green) */
+.diagram-example .node rect,
+.diagram-example .node circle,
+.diagram-example .node polygon {
+  fill: var(--ifm-color-success-lightest) !important;
+  stroke: var(--ifm-color-success) !important;
+}
+
+/* Warning diagrams (red) */
+.diagram-warning .node rect,
+.diagram-warning .node circle,
+.diagram-warning .node polygon {
+  fill: var(--ifm-color-danger-lightest) !important;
+  stroke: var(--ifm-color-danger) !important;
+}
+
+/* Exercise block styling */
+.exercise-block {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background-color: var(--ifm-color-emphasis-100);
+  border-radius: 8px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.exercise-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: var(--ifm-color-primary);
+}
+
+.exercise-difficulty {
+  font-size: 0.85rem;
+  padding: 0.25rem 0.75rem;
+  background-color: var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+}
+
+/* Collapsible solution styling */
+.collapsible-solution {
+  margin-top: 1.5rem;
+}
+
+.collapsible-solution-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--ifm-color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.collapsible-solution-button:hover {
+  background-color: var(--ifm-color-primary-dark);
+}
+
+.collapsible-solution-content {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: var(--ifm-color-emphasis-50);
+  border-radius: 4px;
+  border-left: 4px solid var(--ifm-color-success);
+}
+
+/* Code example component styling */
+.code-example {
+  margin: 2rem 0;
+}
+
+.code-example-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: var(--ifm-color-emphasis-200);
+  border-radius: 4px 4px 0 0;
+  font-weight: 600;
+}
+
+.code-example-copy-button {
+  padding: 0.25rem 0.75rem;
+  background-color: var(--ifm-color-primary);
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.2s;
+}
+
+.code-example-copy-button:hover {
+  background-color: var(--ifm-color-primary-dark);
+}
+
+.code-example-explanation {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: var(--ifm-color-emphasis-100);
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+/* Glossary term styling */
+.glossary-term {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.glossary-term:last-child {
+  border-bottom: none;
+}
+
+.glossary-term h3 {
+  color: var(--ifm-color-primary);
+  margin-top: 0;
+}
+
+.glossary-term-meta {
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-700);
+  margin-top: 0.5rem;
+}
+
+/* Reflection questions styling */
+.reflection-questions {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background-color: var(--ifm-color-emphasis-50);
+  border-radius: 8px;
+  border-left: 4px solid var(--ifm-color-primary);
+}
+
+.reflection-questions h3 {
+  margin-top: 0;
+  color: var(--ifm-color-primary);
+}
+
+.reflection-questions ol {
+  margin-bottom: 0;
+}
+
+.reflection-questions li {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .markdown h1 {
+    font-size: 1.75rem;
+  }
+
+  .markdown h2 {
+    font-size: 1.5rem;
+  }
+
+  .markdown h3 {
+    font-size: 1.25rem;
+  }
+
+  .exercise-block,
+  .code-example,
+  .reflection-questions {
+    padding: 1rem;
+  }
+}
+
+/* Print styles for offline reading */
+@media print {
+  .navbar,
+  .footer,
+  .theme-doc-sidebar-container,
+  .pagination-nav,
+  .theme-doc-breadcrumbs {
+    display: none !important;
+  }
+
+  .main-wrapper {
+    max-width: 100% !important;
+  }
+
+  .collapsible-solution-content {
+    display: block !important;
+  }
+}

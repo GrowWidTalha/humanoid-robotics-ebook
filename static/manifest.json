@@ -1,0 +1,22 @@
+{
+  "name": "When Models Think Wrong: A Practical Guide to Debugging AI Reasoning",
+  "short_name": "AI Debugging Guide",
+  "description": "Learn to debug AI reasoning errors through practical examples and systematic approaches.",
+  "start_url": "/book-hackathon/",
+  "scope": "/book-hackathon/",
+  "display": "standalone",
+  "theme_color": "#2196F3",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/book-hackathon/img/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "books", "reference"],
+  "lang": "en",
+  "dir": "ltr"
+}

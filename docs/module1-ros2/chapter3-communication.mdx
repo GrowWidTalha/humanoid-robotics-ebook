@@ -1,0 +1,237 @@
+---
+id: chapter3-communication
+title: "Chapter 3: Communication Patterns"
+sidebar_label: "Communication"
+sidebar_position: 3
+description: "Learn the three ways ROS 2 nodes communicate: topics for streaming data, services for queries, and actions for long-running tasks."
+keywords: [ros2, topics, services, actions, publisher, subscriber, qos, communication]
+---
+
+# Chapter 3: Communication Patterns
+
+## Learning Objectives
+
+By the end of this chapter, you will be able to:
+
+1. Explain the three ROS 2 communication patterns: topics, services, and actions
+2. Identify which pattern fits different humanoid robot scenarios
+3. Describe how the publish-subscribe model works for topics
+4. Explain Quality of Service (QoS) tradeoffs between reliability and speed
+
+---
+
+## Three Ways to Communicate
+
+In Chapter 2, you learned that nodes communicate by passing messages through ROS 2, not by sharing memory. But there's more to the story - ROS 2 provides three different communication patterns, each designed for a specific type of interaction.
+
+Think about how people communicate. Sometimes you broadcast information to anyone who's listening (like posting on social media). Sometimes you ask someone a specific question and wait for their answer (like asking for directions). And sometimes you give someone a task that takes time and you want updates along the way (like ordering food for delivery and tracking its progress).
+
+ROS 2 nodes communicate in these same three ways:
+- **Topics**: Broadcast continuous streams of data (like social media posts)
+- **Services**: Request-response queries (like asking a question)
+- **Actions**: Long-running tasks with progress feedback (like tracked deliveries)
+
+Each pattern solves different problems. Understanding when to use each one is key to designing effective robot systems.
+
+---
+
+## Topics: Streaming Data
+
+**Topics** are ROS 2's most common communication pattern. A topic is a named channel where nodes can publish data continuously, and other nodes can subscribe to receive that data.
+
+### How Topics Work
+
+The publish-subscribe pattern has two roles:
+- **Publishers** send messages to a topic
+- **Subscribers** receive messages from a topic
+
+Any node can publish to a topic. Any node can subscribe to a topic. Publishers and subscribers don't need to know about each other - they only need to know the topic name.
+
+:::note Key Concept
+Topics use a publish-subscribe pattern. Publishers send data to a named channel. Subscribers receive data from that channel. They never directly connect to each other.
+:::
+
+### When to Use Topics
+
+Use topics for:
+- **Continuous data streams**: Sensor readings that update constantly
+- **One-to-many broadcasting**: When multiple nodes need the same data
+- **Real-time data**: Information that flows continuously
+
+### Humanoid Robot Example: Balance Control
+
+Imagine a humanoid robot maintaining balance:
+
+1. An **IMU sensor node** measures the robot's tilt and rotation 100 times per second
+2. The IMU node **publishes** these measurements to a "robot/imu" topic
+3. A **balance controller node subscribes** to "robot/imu" and receives every measurement
+4. A **logging node** also subscribes to "robot/imu" to record the data
+5. A **visualization node** subscribes to show the tilt on a screen
+
+The IMU node doesn't know or care how many nodes are listening. It just publishes the data. Any node that needs balance information subscribes to the topic. If you want to add a new node that uses balance data, you just make it subscribe - no need to modify the IMU node.
+
+This is powerful because you can add or remove subscribers without changing the publisher. The IMU keeps working whether zero nodes or ten nodes are listening.
+
+### Another Topic Example: Camera Images
+
+A camera node publishes images to a "camera/rgb" topic at 30 frames per second. Multiple nodes can subscribe:
+- A **face detection node** looks for people in the images
+- An **object recognition node** identifies objects
+- A **recording node** saves images to disk
+- A **web interface node** streams images to a remote operator
+
+The camera just publishes. Each subscriber processes the images for its own purpose. If one subscriber crashes, the others keep working. This independence makes the system robust.
+
+---
+
+## Services: Request and Response
+
+While topics are great for continuous data, sometimes you need to ask a specific question and get an answer. That's what **services** are for.
+
+### How Services Work
+
+Services use a request-response pattern:
+- A **client node** sends a request to a service
+- A **server node** processes the request and sends back a response
+- The client waits for the response before continuing
+
+Unlike topics where messages flow continuously, services are one-time interactions. You make a request, get a response, and you're done.
+
+### When to Use Services
+
+Use services for:
+- **Queries**: Asking for current state or information
+- **Quick computations**: Request a calculation, get the result
+- **Triggering actions**: Tell a node to do something simple and report when done
+
+### Humanoid Robot Example: Battery Check
+
+Imagine a navigation system checking the robot's battery:
+
+1. The **navigation node** needs to know if there's enough battery to walk to the kitchen
+2. It sends a request to the "battery/get_level" service
+3. The **battery monitor node** receives the request
+4. The battery monitor checks the battery and responds: "75%"
+5. The navigation node receives the response and decides there's enough power
+
+This is different from a topic because the navigation node doesn't need continuous battery updates. It just wants to check the battery level once, right now, before planning a route.
+
+Services are synchronous - the requesting node waits for an answer. This makes them perfect for queries where you need information before proceeding.
+
+### Another Service Example: Path Planning
+
+When a humanoid needs to walk somewhere, it might use a service:
+- The **navigation node** sends a request: "Plan a path from current position to the kitchen"
+- The **path planner service** calculates a collision-free path considering obstacles
+- The service responds with the planned path (a list of waypoints)
+- The navigation node receives the path and starts following it
+
+Computing a path might take a few seconds. The navigation node sends one request and waits for one response. This is perfect for a service - you ask a question, get an answer, and move on.
+
+---
+
+## Actions: Long-Running Tasks
+
+Topics and services cover most communication needs, but what about tasks that take time? Tasks where you want progress updates? Tasks you might need to cancel? That's where **actions** come in.
+
+### How Actions Work
+
+Actions are designed for long-running, goal-oriented tasks:
+- A **client node** sends a goal to an action server
+- The **action server** works on the goal
+- The server sends periodic **feedback** about progress
+- The client can **cancel** the goal if needed
+- When done, the server sends a final **result**
+
+### When to Use Actions
+
+Use actions for:
+- **Time-consuming tasks**: Operations that take seconds or minutes
+- **Trackable progress**: When you want feedback along the way
+- **Cancellable operations**: Tasks you might need to stop
+
+### Humanoid Robot Example: Walking Task
+
+Imagine telling a humanoid robot to walk forward:
+
+1. A **planner node** sends a goal to the "walk_forward" action: "Walk 5 meters forward"
+2. The **leg control action server** accepts the goal and starts walking
+3. As the robot walks, it sends feedback: "1 meter... 2 meters... 3 meters..."
+4. The planner node receives these updates and can monitor progress
+5. If an obstacle appears, the planner can **cancel** the action
+6. If the robot completes the walk, it sends a result: "Success: Walked 5.0 meters"
+
+Actions are perfect for this because walking takes time, you want to know how far the robot has walked, and you might need to stop if something goes wrong.
+
+Without actions, you'd have to implement this feedback and cancellation yourself using topics and services. Actions provide all of this built-in.
+
+### Another Action Example: Object Manipulation
+
+When a humanoid picks up an object:
+- The **task planner** sends a goal: "Pick up the cup at position (x, y, z)"
+- The **manipulation action server** breaks this into steps: reach, grasp, lift
+- It sends feedback: "Reaching... Grasping... Lifting..."
+- The task planner monitors progress and displays status to the user
+- If the grasp fails (cup slips), the result indicates failure
+- The planner can try again or choose a different object
+
+This task might take 10-20 seconds. You need feedback to know what's happening. You need cancellation in case something goes wrong. Actions handle all of this.
+
+---
+
+## Quality of Service (QoS)
+
+When using topics, you can configure **Quality of Service (QoS)** settings that control how messages are delivered. QoS lets you choose between reliability and speed.
+
+### The Tradeoff
+
+Think about sending a package:
+- **Guaranteed delivery** (reliable): The postal service tracks every package and ensures it arrives, but it's slower and more expensive
+- **Best effort** (fast): Regular mail is faster and cheaper, but packages might get lost
+
+ROS 2 QoS works the same way:
+- **Reliable QoS**: Guarantees every message is delivered, even if that means resending or buffering. Slower but nothing is lost.
+- **Best effort QoS**: Sends messages as fast as possible. If one gets lost, keep going. Faster but some messages might be skipped.
+
+### Choosing QoS
+
+For a humanoid robot:
+- **Balance sensor data**: Use **best effort**. New data arrives 100 times per second. If one message is lost, the next one comes immediately. Speed matters more than perfect delivery.
+- **Camera images**: Use **best effort**. Images stream at 30 fps. Missing one frame isn't critical when another arrives 33 milliseconds later.
+- **Safety commands**: Use **reliable**. If you send "stop motors," you need to know it was received. Reliability matters more than speed.
+- **Configuration updates**: Use **reliable**. When you update a parameter, you need confirmation it was applied correctly.
+
+The key is matching the QoS to your data's nature. High-frequency sensor data can tolerate occasional losses. Critical commands cannot.
+
+:::tip Pattern Selection Guide
+- **Topics**: Continuous data streams (sensor readings, camera images)
+- **Services**: One-time queries (check battery, compute path)
+- **Actions**: Long tasks with feedback (walk, pick up object)
+- **QoS Reliable**: Critical messages (commands, safety)
+- **QoS Best Effort**: High-frequency data (sensors, video)
+:::
+
+---
+
+## Summary
+
+ROS 2 provides three communication patterns, each optimized for different needs:
+
+1. **Topics** (publish-subscribe): Continuous data streams. Publishers broadcast to topics, subscribers receive. Perfect for sensor data and real-time information.
+
+2. **Services** (request-response): One-time queries. Client asks, server responds. Perfect for checking state or requesting computations.
+
+3. **Actions** (goal-oriented): Long-running tasks with feedback and cancellation. Perfect for time-consuming operations like walking or object manipulation.
+
+Quality of Service (QoS) settings let you trade reliability for speed on topics, choosing the right balance for your data type.
+
+In the next chapter, you'll learn about **rclpy** - how Python AI systems use these communication patterns to control robots.
+
+:::tip Learning Checkpoint
+Before continuing, can you identify the right pattern?
+1. A camera sending 30 images per second to a vision system
+2. Asking "How many objects are in view right now?"
+3. Commanding "Pick up that cup" and getting progress updates
+
+*Answers: 1=Topic, 2=Service, 3=Action*
+:::
