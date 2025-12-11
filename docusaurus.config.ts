@@ -29,7 +29,7 @@ const config = {
 
   // Custom fields for chatbot API configuration
   customFields: {
-    chatbotApiUrl: process.env.REACT_APP_API_URL || 'http://localhost:8000/api',
+    chatbotApiUrl: process.env.REACT_APP_API_URL || "https://growwithtalha-humanoid-robotics-rag.hf.space/api",
   },
 
   presets: [
