@@ -211,6 +211,8 @@ See `.specify/memory/constitution.md` for code quality, testing, performance, se
 
 ## Active Technologies
 - Static markdown files in `docs/` directory (Docusaurus convention) (002-digital-twin-module)
+- Python 3.11+ (backend), JavaScript/TypeScript ES2022+ (frontend) (001-rag-chatbot)
+- Neon Serverless Postgres (user accounts, chat history), Qdrant Cloud Free Tier (vector embeddings) (001-rag-chatbot)
 
 ## Recent Changes
 - 002-digital-twin-module: Added Static markdown files in `docs/` directory (Docusaurus convention)
