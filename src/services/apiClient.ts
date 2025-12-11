@@ -7,7 +7,7 @@ import axios from 'axios';
 
 // Get API URL from environment or default to localhost
 // const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
-const API_URL = 'http://localhost:8000/api';
+const API_URL = "https://growwithtalha-humanoid-robotics-rag.hf.space/api"
 
 // Create axios instance
 const apiClient = axios.create({

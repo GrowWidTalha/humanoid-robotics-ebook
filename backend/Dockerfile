@@ -32,6 +32,7 @@ RUN useradd -m -u 1000 appuser
 COPY --from=builder /root/.local /home/appuser/.local
 
 # Copy application code
+COPY .env ./
 COPY src/ ./src/
 COPY scripts/ ./scripts/
 COPY alembic/ ./alembic/
@@ -46,12 +47,12 @@ USER appuser
 # Make sure scripts are on path for appuser
 ENV PATH=/home/appuser/.local/bin:$PATH
 
-# Expose port
-EXPOSE 8000
+# Expose port (7860 is HF Spaces default, 8000 for other deployments)
+EXPOSE 7860
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-    CMD python -c "import requests; requests.get('http://localhost:8000/health')" || exit 1
+    CMD python -c "import requests; requests.get('http://localhost:7860/health')" || exit 1
 
-# Run application
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run application on port 7860 for HF Spaces
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "7860"]

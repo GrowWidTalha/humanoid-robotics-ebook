@@ -13,15 +13,20 @@ interface SelectionModeIndicatorProps {
 
 export function SelectionModeIndicator({ selectedText, onClear }: SelectionModeIndicatorProps) {
   return (
-    <div className={styles.selectionIndicator}>
+    <div className={styles.selectionIndicator} role="status" aria-live="polite">
       <div className={styles.selectionInfo}>
-        <span className={styles.selectionIcon}>📌</span>
+        <span className={styles.selectionIcon} aria-hidden="true">📌</span>
         <span className={styles.selectionText}>
           Querying selected text: "<em>{selectedText.substring(0, 50)}...</em>"
         </span>
       </div>
-      <button onClick={onClear} className={styles.clearSelectionButton} title="Clear selection">
-        ✕
+      <button
+        onClick={onClear}
+        className={styles.clearSelectionButton}
+        title="Clear selection"
+        aria-label="Clear selected text and return to full book search"
+      >
+        <span aria-hidden="true">✕</span>
       </button>
     </div>
   );
