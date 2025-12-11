@@ -1,11 +1,8 @@
-import {themes as prismThemes} from 'prism-react-renderer';
-import type {Config} from '@docusaurus/types';
-import type * as Preset from '@docusaurus/preset-classic';
+// @ts-check
+const { themes: prismThemes } = require('prism-react-renderer');
 
-const lightCodeTheme = prismThemes.github;
-const darkCodeTheme = prismThemes.dracula;
-
-const config: Config = {
+/** @type {import('@docusaurus/types').Config} */
+const config = {
   title: 'Physical AI & Humanoid Robotics',
   tagline: 'A comprehensive textbook on humanoid robotics and embodied AI',
   favicon: 'img/favicon.ico',
@@ -30,16 +27,22 @@ const config: Config = {
     locales: ['en'],
   },
 
+  // Custom fields for chatbot API configuration
+  customFields: {
+    chatbotApiUrl: process.env.REACT_APP_API_URL || 'http://localhost:8000/api',
+  },
+
   presets: [
     [
       'classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          routeBasePath: 'docs',
-          sidebarPath: './sidebars.ts',
-          // Remove this to remove the "edit this page" links.
+          routeBasePath: '/', // Serve docs from the root
+          sidebarPath: require.resolve('./sidebars.ts'),
           editUrl: "https://github.com/GrowWidTalha/humanoid-robotics-ebook/tree/main",
+          // Removed invalid "markdown" option
+          // Removed homePageId as it's deprecated
         },
         blog: false,
         theme: {
@@ -67,6 +70,16 @@ const config: Config = {
             position: 'left',
             label: 'Modules',
           },
+          {
+            to: '/auth/login',
+            label: 'Login',
+            position: 'right',
+          },
+          {
+            to: '/auth/signup',
+            label: 'Sign Up',
+            position: 'right',
+          },
         ],
       },
       footer: {
@@ -76,20 +89,20 @@ const config: Config = {
             title: 'Modules',
             items: [
               {
-                label: 'Module 1: ROS 2',
-                to: '/docs/module1-ros2',
+                label: 'Module 1: ROS 2 Fundamentals',
+                to: '/module1-ros2',
               },
               {
                 label: 'Module 2: Digital Twin',
-                to: '/docs/module-02-digital-twin',
+                to: '/module-02-digital-twin',
               },
               {
-                label: 'Module 3: NVIDIA Isaac',
-                to: '/docs/modules/module-3-ai-robot-brain/overview',
+                label: 'Module 3: AI Robot Brain',
+                to: '/module-3-ai-robot-brain/overview',
               },
               {
                 label: 'Module 4: Vision-Language-Action',
-                to: '/docs/modules/module-4-vla',
+                to: '/module-4-vla',
               },
             ],
           },
@@ -97,9 +110,14 @@ const config: Config = {
         copyright: `Copyright © ${new Date().getFullYear()} Physical AI & Humanoid Robotics. Built with Docusaurus.`,
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
+        theme: prismThemes.github,
+        darkTheme: prismThemes.dracula,
         additionalLanguages: ['python', 'bash', 'yaml', 'json'],
+      },
+      colorMode: {
+        defaultMode: 'dark',
+        disableSwitch: false,
+        respectPrefersColorScheme: false,
       },
     }),
 };

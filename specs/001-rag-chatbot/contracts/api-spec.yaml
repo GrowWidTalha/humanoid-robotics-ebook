@@ -1,0 +1,485 @@
+openapi: 3.0.3
+info:
+  title: RAG Chatbot API
+  description: |
+    API for the Humanoid Robotics Book chatbot feature.
+    Provides authentication, chat functionality, and book content retrieval via RAG pipeline.
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+  - url: https://api.humanoid-robotics-book.com
+    description: Production server
+
+tags:
+  - name: auth
+    description: Authentication endpoints (Better Auth integration)
+  - name: chat
+    description: Chatbot interaction endpoints
+  - name: health
+    description: Health check and monitoring
+
+paths:
+  /auth/register:
+    post:
+      tags: [auth]
+      summary: Register a new user account
+      description: Creates a new user account with email and password. Password is hashed using Better Auth.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+                  example: SecurePass123!
+      responses:
+        '201':
+          description: User account created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/login:
+    post:
+      tags: [auth]
+      summary: Authenticate user and create session
+      description: Validates credentials and returns JWT token in HTTP-only cookie.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                password:
+                  type: string
+                  format: password
+                  example: SecurePass123!
+      responses:
+        '200':
+          description: Authentication successful
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: auth_token=abc123; HttpOnly; Secure; SameSite=Strict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/logout:
+    post:
+      tags: [auth]
+      summary: Terminate user session
+      description: Invalidates the current session token and clears authentication cookie.
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logged out successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/me:
+    get:
+      tags: [auth]
+      summary: Get current authenticated user info
+      description: Returns user profile information for the authenticated user.
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: User profile retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /chat/message:
+    post:
+      tags: [chat]
+      summary: Send a message to the chatbot
+      description: |
+        Sends a user question to the RAG chatbot. The chatbot retrieves relevant book content
+        from Qdrant and generates a response using OpenAI Agents SDK.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatMessageRequest'
+      responses:
+        '200':
+          description: Chatbot response generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatMessageResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '500':
+          description: OpenAI API error or internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /chat/history:
+    get:
+      tags: [chat]
+      summary: Retrieve chat history for a thread
+      description: Returns paginated chat history for a specific OpenAI thread.
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: thread_id
+          in: query
+          required: true
+          schema:
+            type: string
+            example: thread_abc123
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+      responses:
+        '200':
+          description: Chat history retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ChatMessage'
+                  total:
+                    type: integer
+                    example: 42
+                  limit:
+                    type: integer
+                    example: 50
+                  offset:
+                    type: integer
+                    example: 0
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /chat/threads:
+    get:
+      tags: [chat]
+      summary: List all chat threads for the authenticated user
+      description: Returns a list of all OpenAI thread IDs associated with the user's chat history.
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Thread list retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  threads:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        thread_id:
+                          type: string
+                          example: thread_abc123
+                        last_message_at:
+                          type: string
+                          format: date-time
+                          example: '2025-12-06T14:30:00Z'
+                        message_count:
+                          type: integer
+                          example: 12
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /health:
+    get:
+      tags: [health]
+      summary: Health check endpoint
+      description: Returns service health status including database and external API connectivity.
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: '2025-12-06T14:30:00Z'
+                  checks:
+                    type: object
+                    properties:
+                      database:
+                        type: string
+                        example: connected
+                      qdrant:
+                        type: string
+                        example: connected
+                      openai:
+                        type: string
+                        example: connected
+        '503':
+          description: Service is unhealthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: unhealthy
+                  timestamp:
+                    type: string
+                    format: date-time
+                  checks:
+                    type: object
+                    properties:
+                      database:
+                        type: string
+                        example: disconnected
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: auth_token
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        created_at:
+          type: string
+          format: date-time
+          example: '2025-12-01T10:00:00Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2025-12-06T14:30:00Z'
+
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        message:
+          type: string
+          example: Authentication successful
+
+    ChatMessageRequest:
+      type: object
+      required: [message, query_mode]
+      properties:
+        message:
+          type: string
+          minLength: 1
+          maxLength: 10000
+          example: What is a ROS 2 node?
+        thread_id:
+          type: string
+          description: OpenAI thread ID for continuing conversation (optional for first message)
+          example: thread_abc123
+        query_mode:
+          type: string
+          enum: [full_book, selection]
+          description: Whether to search entire book or only selected text
+          example: full_book
+        selected_text:
+          type: string
+          description: User-selected text from book page (required if query_mode is 'selection')
+          example: "ROS 2 nodes are individual processes that perform computation..."
+
+    ChatMessageResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 660e8400-e29b-41d4-a716-446655440001
+        thread_id:
+          type: string
+          example: thread_abc123
+        role:
+          type: string
+          enum: [user, assistant]
+          example: assistant
+        content:
+          type: string
+          example: "A ROS 2 node is a single process that performs computation. Each node is responsible for a specific task..."
+        metadata:
+          type: object
+          properties:
+            query_mode:
+              type: string
+              example: full_book
+            chunk_ids:
+              type: array
+              items:
+                type: string
+              example: [chunk_001_002_001, chunk_001_002_003]
+            response_time_ms:
+              type: integer
+              example: 3421
+        created_at:
+          type: string
+          format: date-time
+          example: '2025-12-06T14:30:00Z'
+
+    ChatMessage:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        thread_id:
+          type: string
+        role:
+          type: string
+          enum: [user, assistant]
+        content:
+          type: string
+        metadata:
+          type: object
+        created_at:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Invalid request
+        message:
+          type: string
+          example: Email address is already registered
+        details:
+          type: object
+          nullable: true
+
+  responses:
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: Validation error
+            message: Message content is required
+            details:
+              field: message
+              constraint: minLength
+
+    Unauthorized:
+      description: Authentication required or invalid token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: Unauthorized
+            message: Authentication required
+
+    RateLimitExceeded:
+      description: Rate limit exceeded
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Number of seconds to wait before retrying
+          example: 60
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: Rate limit exceeded
+            message: Maximum 20 requests per minute allowed

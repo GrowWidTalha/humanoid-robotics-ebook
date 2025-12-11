@@ -24,7 +24,22 @@
       "Bash(git remote add:*)",
       "Bash(git commit:*)",
       "Bash(git config:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(python -m alembic:*)",
+      "Bash(python3:*)",
+      "Bash(source myenv/bin/activate:*)",
+      "Bash(alembic upgrade:*)",
+      "Bash(alembic current:*)",
+      "Bash(source venv/bin/activate)",
+      "Bash(pip install:*)",
+      "Bash([ -f .env ])",
+      "Bash(curl:*)",
+      "Bash(pkill:*)",
+      "Bash(timeout 10 python:*)",
+      "Bash(echo \")",
+      "Bash(cat /mnt/d/class/humanoid-robots-book/backend/src/api/routes/__init__.py)",
+      "Bash(git --version:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

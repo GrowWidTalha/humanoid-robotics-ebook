@@ -7,6 +7,8 @@ import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import Heading from '@theme/Heading';
 
 import styles from './index.module.css';
+import { CustomHero } from '../components/LandingPage/CustomHero';
+import { ChatbotFeatureShowcase } from '../components/LandingPage/ChatbotFeatureShowcase';
 
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
@@ -35,10 +37,8 @@ export default function Home(): ReactNode {
     <Layout
       title={`Hello from ${siteConfig.title}`}
       description="Description will go into a meta tag in <head />">
-      <HomepageHeader />
-      <main>
-        <HomepageFeatures />
-      </main>
+      <CustomHero />
+      <ChatbotFeatureShowcase />
     </Layout>
   );
 }
