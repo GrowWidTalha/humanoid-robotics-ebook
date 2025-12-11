@@ -25,8 +25,11 @@ RUN apt-get update && apt-get install -y \
     postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy Python dependencies from builder
-COPY --from=builder /root/.local /root/.local
+# Create non-root user early (before copying dependencies)
+RUN useradd -m -u 1000 appuser
+
+# Copy Python dependencies from builder to user-accessible location
+COPY --from=builder /root/.local /home/appuser/.local
 
 # Copy application code
 COPY src/ ./src/
@@ -34,12 +37,14 @@ COPY scripts/ ./scripts/
 COPY alembic/ ./alembic/
 COPY alembic.ini ./
 
-# Make sure scripts are on path
-ENV PATH=/root/.local/bin:$PATH
+# Change ownership to appuser
+RUN chown -R appuser:appuser /app /home/appuser/.local
 
-# Create non-root user for security
-RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+# Switch to non-root user
 USER appuser
+
+# Make sure scripts are on path for appuser
+ENV PATH=/home/appuser/.local/bin:$PATH
 
 # Expose port
 EXPOSE 8000
