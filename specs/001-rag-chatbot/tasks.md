@@ -191,14 +191,14 @@ This is a **web application** with:
 - [x] T093 [P] Add retry logic for transient failures in backend/src/services/rag_service.py: Implement exponential backoff for OpenAI API calls (max 3 retries), handle rate limit errors (429) with Retry-After header **COMPLETED**
 - [ ] T094 [P] Create database seed script in backend/scripts/seed_database.py: Create sample test users for development, generate sample chat messages for UI testing
 - [ ] T095 [P] Update frontend error handling in frontend/src/services/apiClient.ts: Add toast notifications for errors, implement retry logic for network failures, handle 429 rate limit with user-friendly message
-- [ ] T096 [P] Add accessibility features to chatbot UI in frontend/src/components/ChatbotWidget/ChatbotWidget.tsx: ARIA labels for input box, keyboard navigation (Tab, Enter), screen reader support for messages
+- [x] T096 [P] Add accessibility features to chatbot UI in frontend/src/components/ChatbotWidget/ChatbotWidget.tsx: ARIA labels for input box, keyboard navigation (Tab, Enter), screen reader support for messages
 - [ ] T097 [P] Optimize frontend bundle size: Code-split ChatbotWidget component, lazy load Better Auth components, analyze bundle with webpack-bundle-analyzer
 - [ ] T098 [P] Add performance monitoring in backend/src/main.py: Instrument endpoints with timing metrics, log slow queries (>1s), set up basic Prometheus metrics endpoint (if infrastructure supports)
 - [ ] T099 Validate quickstart.md instructions: Follow quickstart guide step-by-step on clean environment, verify all commands work, update any outdated instructions
-- [ ] T100 Create deployment documentation in specs/001-rag-chatbot/deployment.md: Document Docker Compose deployment steps, environment variable requirements, database migration process, Qdrant collection initialization
+- [x] T100 Create deployment documentation in specs/001-rag-chatbot/deployment.md: Document Docker Compose deployment steps, environment variable requirements, database migration process, Qdrant collection initialization
 - [ ] T101 Run end-to-end validation: Test all user stories (US1-US4) in sequence, verify independent functionality of each story, check error handling and edge cases (session expiration, API failures, no search results)
 - [ ] T102 Code cleanup and formatting: Run black on all backend Python files, run prettier on all frontend TypeScript files, ensure no linting warnings (flake8, ESLint)
-- [ ] T103 Update project README.md: Add RAG chatbot feature description, link to quickstart.md, list prerequisites (API keys required), add architecture diagram (optional)
+- [x] T103 Update project README.md: Add RAG chatbot feature description, link to quickstart.md, list prerequisites (API keys required), add architecture diagram (optional)
 - [ ] T104 Security audit: Review all authentication flows for vulnerabilities, check OWASP top 10 compliance (SQL injection, XSS, CSRF, auth bypass), verify secrets are not committed to Git
 - [ ] T105 Performance benchmarking: Test chatbot response time under load (10, 25, 50 concurrent users), verify <5s p95 latency target, optimize bottlenecks if needed
 

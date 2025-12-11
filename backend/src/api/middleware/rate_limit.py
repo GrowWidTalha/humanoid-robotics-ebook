@@ -1,5 +1,5 @@
 # src/api/middleware/rate_limit.py
-from typing import Callable
+from typing import Callable, Optional
 from fastapi import Request
 from fastapi.responses import JSONResponse
 import inspect
@@ -20,12 +20,23 @@ def get_user_identifier(request: Request) -> str:
     return f"ip:{get_remote_address(request)}"
 
 # Create limiter instance (single authoritative limiter in this module)
-limiter = Limiter(
-    key_func=get_user_identifier,
-    default_limits=[f"{settings.rate_limit_per_minute}/minute"],
-    storage_uri=settings.redis_url,
-    strategy="fixed-window"
-)
+# Try Redis-based rate limiting first, fallback to in-memory if Redis unavailable
+try:
+    limiter = Limiter(
+        key_func=get_user_identifier,
+        default_limits=[f"{settings.rate_limit_per_minute}/minute"],
+        storage_uri=settings.redis_url,
+        strategy="fixed-window"
+    )
+    logger.info(f"Rate limiting initialized with Redis: {settings.redis_url}")
+except Exception as e:
+    logger.warning(f"Redis connection failed, using in-memory rate limiting: {e}")
+    # Fallback to in-memory storage (not persistent across restarts)
+    limiter = Limiter(
+        key_func=get_user_identifier,
+        default_limits=[f"{settings.rate_limit_per_minute}/minute"],
+        strategy="fixed-window"
+    )
 
 async def rate_limit_dependency(request: Request):
     """

@@ -39,7 +39,8 @@
       "Bash(echo \")",
       "Bash(cat /mnt/d/class/humanoid-robots-book/backend/src/api/routes/__init__.py)",
       "Bash(git --version:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(gh pr list:*)"
     ],
     "deny": [],
     "ask": []

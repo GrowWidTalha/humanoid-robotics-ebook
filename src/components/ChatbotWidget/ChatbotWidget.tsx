@@ -53,17 +53,21 @@ export function ChatbotWidget() {
   if (!isExpanded) {
     // Collapsed state - floating button
     return (
-      <div className={styles.floatingButton} onClick={toggleExpanded}>
-        <span className={styles.chatIcon}>💬</span>
+      <button
+        className={styles.floatingButton}
+        onClick={toggleExpanded}
+        aria-label="Open AI Assistant chatbot"
+        aria-expanded={false}>
+        <span className={styles.chatIcon} aria-hidden="true">💬</span>
         <span className={styles.buttonText}>Ask AI</span>
-      </div>
+      </button>
     );
   }
 
   return (
-    <div className={styles.chatbotContainer}>
+    <div className={styles.chatbotContainer} role="complementary" aria-label="AI Assistant">
       <div className={styles.chatbotHeader}>
-        <h3 className={styles.chatbotTitle}>Robotics AI Assistant</h3>
+        <h3 className={styles.chatbotTitle} id="chatbot-title">Robotics AI Assistant</h3>
         <div className={styles.headerButtons}>
           <button
             onClick={() => {
@@ -71,13 +75,15 @@ export function ChatbotWidget() {
               clearSelection();
             }}
             className={styles.clearButton}
+            aria-label="Start new conversation"
             title="New conversation"
           >
-            ✨
+            <span aria-hidden="true">✨</span>
           </button>
           <button
             onClick={toggleExpanded}
             className={styles.closeButton}
+            aria-label="Minimize chatbot"
             title="Minimize"
           >
             ✕
@@ -92,9 +98,16 @@ export function ChatbotWidget() {
         />
       )}
 
-      <div className={styles.messagesContainer}>
+      <div
+        className={styles.messagesContainer}
+        role="log"
+        aria-live="polite"
+        aria-atomic="false"
+        aria-relevant="additions"
+        aria-label="Chat conversation"
+      >
         {messages.length === 0 && !selectedText && (
-          <div className={styles.emptyState}>
+          <div className={styles.emptyState} role="status">
             <p>👋 Hi! I'm your AI assistant for humanoid robotics.</p>
             <p>Ask me anything about ROS 2, digital twins, AI, or robotics, or select text on any page to ask a question about it.</p>
           </div>
@@ -104,21 +117,23 @@ export function ChatbotWidget() {
           <div
             key={message.id}
             className={`${styles.message} ${styles[message.role]}`}
+            role="article"
+            aria-label={`Chat message from ${message.role === 'user' ? 'you' : 'AI assistant'}`}
           >
             <div className={styles.messageContent}>
               {message.content}
             </div>
             {message.metadata?.query_mode === 'selection' && (
-              <div className={styles.selectionBadge}>
-                📌 Selection query
+              <div className={styles.selectionBadge} aria-label="This was a selection-based query">
+                <span aria-hidden="true">📌</span> Selection query
               </div>
             )}
           </div>
         ))}
 
         {isLoading && (
-          <div className={`${styles.message} ${styles.assistant}`}>
-            <div className={styles.typingIndicator}>
+          <div className={`${styles.message} ${styles.assistant}`} role="status" aria-label="AI assistant is typing">
+            <div className={styles.typingIndicator} aria-hidden="true">
               <span></span>
               <span></span>
               <span></span>
@@ -127,15 +142,15 @@ export function ChatbotWidget() {
         )}
 
         {error && (
-          <div className={styles.errorMessage}>
-            ⚠️ {error}
+          <div className={styles.errorMessage} role="alert" aria-live="assertive">
+            <span aria-hidden="true">⚠️</span> {error}
           </div>
         )}
 
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSubmit} className={styles.inputForm}>
+      <form onSubmit={handleSubmit} className={styles.inputForm} role="search">
         <input
           type="text"
           value={inputValue}
@@ -143,13 +158,16 @@ export function ChatbotWidget() {
           placeholder={selectedText ? "Ask about the selected text..." : "Ask a question..."}
           className={styles.input}
           disabled={isLoading}
+          aria-label={selectedText ? "Ask a question about the selected text" : "Ask a question about robotics"}
+          aria-describedby="chatbot-title"
         />
         <button
           type="submit"
           className={styles.sendButton}
           disabled={!inputValue.trim() || isLoading}
+          aria-label={isLoading ? "Sending message..." : "Send message"}
         >
-          {isLoading ? '⏳' : '➤'}
+          <span aria-hidden="true">{isLoading ? '⏳' : '➤'}</span>
         </button>
       </form>
     </div>
