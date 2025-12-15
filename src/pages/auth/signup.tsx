@@ -40,7 +40,7 @@ export default function SignupPage() {
   };
 
   const handleSwitchToLogin = () => {
-    history.push('/auth/login');
+    history.push(baseUrl + 'auth/login');
   };
 
   // T076: Return null while redirecting (don't show signup form to authenticated users)

@@ -11,18 +11,22 @@ import { useHistory } from '@docusaurus/router';
 import { useAuth } from '../../hooks/useAuth';
 import { useChatbotControl } from '../../hooks/useChatbotControl';
 import styles from './LandingPage.module.css';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 export function CustomHero() {
   // T085-T086: Import hooks for auth state and chatbot control
   const { isAuthenticated } = useAuth();
   const { setIsExpanded } = useChatbotControl();
+  const basePath = useBaseUrl("auth/signup")
   const history = useHistory();
 
   // T088: Handle "Get Started with AI" button click with context-aware behavior
   const handleGetStarted = () => {
     if (!isAuthenticated) {
       // T089: Not authenticated → navigate to signup
-      history.push('/auth/signup');
+
+      history.push(basePath);
+
     } else {
       // T090: Authenticated → expand chatbot
       setIsExpanded(true);
