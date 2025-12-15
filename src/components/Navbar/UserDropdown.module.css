@@ -1,0 +1,114 @@
+/**
+ * T032: UserDropdown styling using Docusaurus CSS variables
+ * Ensures consistency with Docusaurus theme
+ */
+
+.userDropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.userButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  color: var(--ifm-font-color-base);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.userButton:hover {
+  background-color: var(--ifm-color-emphasis-100);
+  border-color: var(--ifm-color-emphasis-400);
+}
+
+.userButton:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+.userIcon {
+  font-size: 1.2rem;
+}
+
+.userName {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdownArrow {
+  font-size: 0.7rem;
+  transition: transform 0.2s ease;
+}
+
+.userButton[aria-expanded="true"] .dropdownArrow {
+  transform: rotate(180deg);
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 200px;
+  background-color: var(--ifm-background-color);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  box-shadow: var(--ifm-global-shadow-lw);
+  padding: 0.5rem 0;
+  z-index: 1000;
+}
+
+.userInfo {
+  padding: 0.75rem 1rem;
+}
+
+.userEmail {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-700);
+  word-break: break-word;
+}
+
+.divider {
+  height: 1px;
+  background-color: var(--ifm-color-emphasis-200);
+  margin: 0.5rem 0;
+}
+
+.logoutButton {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  color: var(--ifm-color-danger);
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-align: left;
+  transition: background-color 0.2s ease;
+}
+
+.logoutButton:hover {
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.logoutButton:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: -2px;
+}
+
+/* Dark mode support */
+html[data-theme='dark'] .userButton {
+  border-color: var(--ifm-color-emphasis-400);
+}
+
+html[data-theme='dark'] .dropdownMenu {
+  background-color: var(--ifm-background-color);
+  border-color: var(--ifm-color-emphasis-400);
+}

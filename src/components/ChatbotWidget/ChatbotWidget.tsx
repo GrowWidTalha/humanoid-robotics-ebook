@@ -2,16 +2,19 @@
  * ChatbotWidget component
  *
  * Main chatbot interface with message list, input, and RAG-powered responses.
+ * T053-T056: Integrated with useChatbotControl for cross-component state management
  */
 import React, { useState, useRef, useEffect } from 'react';
 import { useChatbot } from '../../hooks/useChatbot';
 import { useTextSelection } from '../../hooks/useTextSelection';
+import { useChatbotControl } from '../../hooks/useChatbotControl';
 import { SelectionModeIndicator } from './SelectionModeIndicator';
 import styles from './ChatbotWidget.module.css';
 
 export function ChatbotWidget() {
   const [inputValue, setInputValue] = useState('');
-  const [isExpanded, setIsExpanded] = useState(true);
+  // T054: Replace local useState with useChatbotControl for cross-component state
+  const { isExpanded, setIsExpanded } = useChatbotControl();
   const messagesEndRef = useRef(null);
 
   const {
@@ -46,6 +49,7 @@ export function ChatbotWidget() {
     clearSelection();
   };
 
+  // T055: Update toggleExpanded to use setIsExpanded from context
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
   };
