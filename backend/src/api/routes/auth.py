@@ -128,12 +128,13 @@ async def register(
     await AuthService.create_session(db=db, user_id=user.id, token=token)
 
     # Set HTTP-only cookie with JWT token
+    # Use samesite="none" for cross-origin requests (frontend on GitHub Pages, backend on HF)
     response.set_cookie(
         key="auth_token",
         value=token,
         httponly=True,
-        secure=True,  # Only send over HTTPS
-        samesite="lax",  # CSRF protection
+        secure=True,  # Required when using samesite="none"
+        samesite="none",  # Allow cross-origin cookie sending
         max_age=60 * 60 * 24 * 7  # 7 days
     )
 
@@ -231,12 +232,13 @@ async def login(
     await AuthService.create_session(db=db, user_id=user.id, token=token)
 
     # Set HTTP-only cookie with JWT token
+    # Use samesite="none" for cross-origin requests (frontend on GitHub Pages, backend on HF)
     response.set_cookie(
         key="auth_token",
         value=token,
         httponly=True,
-        secure=True,
-        samesite="lax",
+        secure=True,  # Required when using samesite="none"
+        samesite="none",  # Allow cross-origin cookie sending
         max_age=60 * 60 * 24 * 7  # 7 days
     )
 
@@ -275,8 +277,8 @@ async def logout(
     # Note: We need to extract token from request, but we already have current_user
     # so we can just delete the cookie. In production, we'd also revoke the session.
 
-    # Clear HTTP-only cookie
-    response.delete_cookie(key="auth_token", httponly=True, secure=True, samesite="lax")
+    # Clear HTTP-only cookie (must match samesite setting used when creating)
+    response.delete_cookie(key="auth_token", httponly=True, secure=True, samesite="none")
 
     logger.info(f"User logged out: {current_user.id}")
 
@@ -288,12 +290,25 @@ async def logout(
     response_model=UserResponse,
     status_code=status.HTTP_200_OK,
     summary="Get current user",
-    description="Get authenticated user's profile information"
+    description=(
+        "Get authenticated user's profile information.\n\n"
+        "**Request format:**\n"
+        "- This endpoint expects an authenticated request.\n"
+        "- No request body is required.\n"
+        "- The user must include authentication credentials either by having a valid `auth_token` HTTP-only cookie set (as done on login/register), or (if supported) via Bearer token in the Authorization header.\n\n"
+        "**Required fields:**\n"
+        "- No fields are required in the request body. All authentication is handled via cookie/session (or token) middleware.\n"
+    )
 )
 async def get_current_user_profile(
     current_user: User = Depends(get_current_user)
 ) -> UserResponse:
-    """Get current authenticated user's profile
+    """
+    Get current authenticated user's profile
+
+    Request format:
+      - No request body required.
+      - Requires a valid authentication token (in cookie 'auth_token' or Authorization header if supported).
 
     Args:
         current_user: Authenticated user (from middleware)
