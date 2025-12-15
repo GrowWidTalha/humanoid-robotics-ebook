@@ -7,8 +7,8 @@
 import axios from 'axios';
 
 // Get API URL from environment or default to localhost
-const API_URL = 'http://localhost:8000/api';
-// const API_URL = "https://growwithtalha-humanoid-robotics-rag.hf.space/api";
+// const API_URL = 'http://localhost:8000/api';
+const API_URL = "https://growwithtalha-humanoid-robotics-rag.hf.space/api";
 
 // Create axios instance with default configuration
 const apiClient = axios.create({
