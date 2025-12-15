@@ -29,7 +29,8 @@ const config = {
 
   // Custom fields for chatbot API configuration
   customFields: {
-    chatbotApiUrl: process.env.REACT_APP_API_URL || "https://growwithtalha-humanoid-robotics-rag.hf.space/api",
+    // chatbotApiUrl: process.env.REACT_APP_API_URL || "https://growwithtalha-humanoid-robotics-rag.hf.space/api",
+    chatbotApiUrl: process.env.REACT_APP_API_URL || "http://localhost:8000/api",
   },
 
   presets: [
@@ -70,16 +71,8 @@ const config = {
             position: 'left',
             label: 'Modules',
           },
-          {
-            to: '/auth/login',
-            label: 'Login',
-            position: 'right',
-          },
-          {
-            to: '/auth/signup',
-            label: 'Sign Up',
-            position: 'right',
-          },
+          // Auth links (Login/Signup) now handled dynamically by swizzled Navbar
+          // See src/theme/Navbar/index.tsx for auth-aware menu items
         ],
       },
       footer: {
