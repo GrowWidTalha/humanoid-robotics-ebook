@@ -90,3 +90,11 @@ backend/*.egg-info/
 # Shared
 shared/node_modules/
 shared/dist/
+
+# TypeScript compiled output
+src/**/*.js
+src/**/*.jsx
+shared/**/*.js
+shared/**/*.jsx
+docusaurus.config.js
+sidebars.js
