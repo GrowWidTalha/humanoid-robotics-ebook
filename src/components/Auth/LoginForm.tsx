@@ -36,6 +36,12 @@ export function LoginForm({ onSuccess, onSwitchToSignup }) {
     }
   };
 
+  const handleUseTestCredentials = () => {
+    setEmail('test@example.com');
+    setPassword('Test123!');
+    setError('');
+  };
+
   return (
     <div className={styles.authContainer}>
       <div className={styles.authCard}>
@@ -83,6 +89,15 @@ export function LoginForm({ onSuccess, onSwitchToSignup }) {
               minLength={8}
             />
           </div>
+
+          <button
+            type="button"
+            onClick={handleUseTestCredentials}
+            className={styles.testCredentialsButton}
+            disabled={isLoading}
+          >
+            Use Test Credentials
+          </button>
 
           <button
             type="submit"
