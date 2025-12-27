@@ -199,6 +199,19 @@ humanoid-robots-book/
 └── history/                       # Prompt history records
 ```
 
+## Testing & Demo Access
+
+### Test Credentials
+
+For quick testing and demo purposes, use the "Use Test Credentials" button on the login page, which automatically fills in:
+
+- **Email**: `test@example.com`
+- **Password**: `Test123!`
+
+This allows testers and evaluators to quickly access the chatbot without going through the full registration process.
+
+**Note**: These test credentials only work if the backend has been seeded with a test user. For local development, you may need to create the test account manually through the signup process.
+
 ## API Documentation
 
 Once the backend is running, visit:

@@ -96,6 +96,31 @@
   margin-top: 0.25rem;
 }
 
+/* Test Credentials Button */
+.testCredentialsButton {
+  background-color: transparent;
+  border: 1px solid #4a4a4a;
+  border-radius: 8px;
+  color: #a0a0a0;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.625rem 1rem;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.testCredentialsButton:hover:not(:disabled) {
+  border-color: #7877c6;
+  color: #7877c6;
+  background-color: rgba(120, 119, 198, 0.05);
+}
+
+.testCredentialsButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Submit Button */
 .submitButton {
   background: linear-gradient(135deg, #7877c6 0%, #6366f1 100%);
@@ -221,6 +246,7 @@
 /* Accessibility: Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .submitButton,
+  .testCredentialsButton,
   .switchButton,
   .formInput,
   .loadingSpinner {
